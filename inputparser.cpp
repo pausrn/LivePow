@@ -49,6 +49,8 @@ void InputParser::process()
                     computeEpochDate();
                 break;
                 case 3:
+                    if(currentLine.maxFreq==maxFreq) currentY++;
+
                     minFreq=qMin(minFreq,currentLine.minFreq);
                     maxFreq=qMax(maxFreq,currentLine.maxFreq);
                 break;
@@ -66,8 +68,6 @@ void InputParser::process()
         break;
         case '\n':
             sendPixel();
-
-            if(currentLine.maxFreq==maxFreq) currentY++;
 
             lastMaxFreq=currentLine.maxFreq;
 
