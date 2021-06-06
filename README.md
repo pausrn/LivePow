@@ -1,5 +1,5 @@
 # LivePow
-An reader for making heatmap from soapy_power output
+A reader for making heatmap from soapy_power output
 
 ## Building
 ```
