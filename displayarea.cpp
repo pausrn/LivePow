@@ -21,7 +21,7 @@ void DisplayArea::paintEvent(QPaintEvent *event)
 
 bool DisplayArea::pixelSet(int x, int y)
 {
-    if(x>image.width()||y>image.height()) return false;
+    if(x>=image.width()||y>=image.height()) return false;
     return qAlpha(image.pixel(x,y))==255;
 }
 

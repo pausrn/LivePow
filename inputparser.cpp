@@ -48,6 +48,13 @@ void InputParser::process()
                 case 1:
                     computeEpochDate();
                 break;
+                case 3:
+                    minFreq=qMin(minFreq,currentLine.minFreq);
+                    maxFreq=qMax(maxFreq,currentLine.maxFreq);
+                break;
+                case 4:
+                    if(decimal) currentLine.freqStep++;
+                break;
                 default:
                     if(index>5){
                         sendPixel();
@@ -58,10 +65,9 @@ void InputParser::process()
             decimal=false;
         break;
         case '\n':
-            minFreq=qMin(minFreq,currentLine.minFreq);
-            maxFreq=qMax(maxFreq,currentLine.maxFreq);
-
             sendPixel();
+
+            if(currentLine.maxFreq==maxFreq) currentY++;
 
             lastMaxFreq=currentLine.maxFreq;
 
@@ -159,8 +165,6 @@ void InputParser::sendPixel()
     color=palettePixels[paletteIndex];
 
     currentX=(currentLine.minFreq-minFreq)/currentLine.freqStep+(index-5);
-
-    if(display->pixelSet(currentX,currentY)) currentY++;
 
     display->setPixel(currentX,currentY,color);
     currentX++;
