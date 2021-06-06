@@ -28,6 +28,9 @@ private:
     unsigned long minFreq=-1;
     unsigned long maxFreq=0;
 
+    float minPow=__FLT_MAX__;
+    float maxPow=0;
+
     unsigned long lastMaxFreq=0;
 
     unsigned long index=0;

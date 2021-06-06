@@ -123,7 +123,18 @@ void InputParser::computeEpochDate()
 void InputParser::sendPixel()
 {
     currentPowerValue*=sign;
-    int col=qRound((80-currentPowerValue)*6);
+
+    if(currentPowerValue<minPow||currentPowerValue>maxPow){
+        float newMin=qMin(currentPowerValue,minPow);
+        float newMax=qMax(currentPowerValue,maxPow);
+
+        display->updateColorMap(minPow,maxPow,newMin,newMax);
+
+        minPow=newMin;
+        maxPow=newMax;
+    }
+
+    int col=qRound(currentPowerValue-minPow)*255/(maxPow-minPow);
     display->setPixel(currentX,currentY,qRgba(col,col,col,255));
     currentX++;
     currentPowerValue=0;

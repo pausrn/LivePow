@@ -45,3 +45,19 @@ bool DisplayArea::saveImage(const QString &fileName, const char *fileFormat)
 {
     return image.save(fileName, fileFormat);
 }
+
+void DisplayArea::updateColorMap(float oldMin, float oldMax, float newMin, float newMax)
+{
+    QRgb* imagePixels=(QRgb*)image.bits();
+    for(unsigned long long i=0;i<image.sizeInBytes()/sizeof(QRgb);i++){
+        QRgb currentColor=imagePixels[i];
+        QRgb newColor=qRgba(remap(qRed(currentColor),oldMin,oldMax,newMin,newMax),remap(qGreen(currentColor),oldMin,oldMax,newMin,newMax),remap(qBlue(currentColor),oldMin,oldMax,newMin,newMax),qAlpha(currentColor));
+        imagePixels[i]=newColor;
+    }
+}
+
+char DisplayArea::remap(char c, float omin, float omax, float nmin, float nmax)
+{
+    float nVal=(255*(omin-nmin)+c*(omax-omin))/(nmax-nmin);
+    return qRound(nVal);
+}
