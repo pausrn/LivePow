@@ -12,6 +12,11 @@ int main(int argc, char *argv[])
     argsParser.addHelpOption();
     argsParser.addPositionalArgument("source","csv file to read data from, default stdin");
 
+    QCommandLineOption skipFirstLines(QStringList() << "s" << "ignoreFirstLines",
+              "Skip the first <n> lines",
+              "number of lines");
+    argsParser.addOption(skipFirstLines);
+
     argsParser.process(a);
 
     MainWindow w;

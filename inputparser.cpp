@@ -17,12 +17,21 @@ InputParser::InputParser(FILE* input,DisplayArea* display)
     timer->start(0);*/
 }
 
+void InputParser::sendParameters(unsigned long ignoreFirstNLines)
+{
+    this->ignoreFirstNLines=ignoreFirstNLines;
+}
 
 void InputParser::process()
 {
     while(1){
     int c=fgetc(input);
     if(c==EOF) continue;
+
+    if(nbOfLinesParsed<ignoreFirstNLines){
+        if(c=='\n') nbOfLinesParsed++;
+        continue;
+    }
 
     switch(c){
         case ',':
@@ -52,6 +61,7 @@ void InputParser::process()
             }
             lastMaxFreq=currentLine.maxFreq;
 
+            nbOfLinesParsed++;
             currentLine=line();
             decimal=false;
         break;
@@ -137,7 +147,7 @@ void InputParser::sendPixel()
         maxPow=newMax;
     }
 
-    int col=qRound(currentPowerValue-minPow*255/(maxPow-minPow));
+    int col=qRound((currentPowerValue-minPow)*255/(maxPow-minPow));
     display->setPixel(currentX,currentY,qRgba(col,col,col,255));
     currentX++;
     currentPowerValue=0;

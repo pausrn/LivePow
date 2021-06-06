@@ -24,6 +24,8 @@ class InputParser : public QObject
 public:
     InputParser(FILE* input,DisplayArea* display);
 
+    void sendParameters(unsigned long ignoreFirstNLines);
+
 private:
     unsigned long minFreq=-1;
     unsigned long maxFreq=0;
@@ -34,6 +36,9 @@ private:
     unsigned long lastMaxFreq=0;
 
     unsigned long index=0;
+
+    unsigned long nbOfLinesParsed=0;
+    unsigned long ignoreFirstNLines=0;
 
     line currentLine;
 

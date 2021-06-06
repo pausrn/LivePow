@@ -41,6 +41,10 @@ void MainWindow::sendArgs(QCommandLineParser *argsParser)
 
     parser=new InputParser(input,displayArea);
 
+    if(argsParser->isSet("s")){
+        parser->sendParameters(argsParser->value("s").toLong());
+    }
+
     QThread* workerThread=new QThread();
 
     parser->moveToThread(workerThread);
