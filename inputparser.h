@@ -32,7 +32,7 @@ private:
     unsigned long maxFreq=0;
 
     float minPow=__FLT_MAX__;
-    float maxPow=0;
+    float maxPow=-__FLT_MAX__;
 
     unsigned long lastMaxFreq=0;
 

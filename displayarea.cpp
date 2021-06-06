@@ -19,6 +19,12 @@ void DisplayArea::paintEvent(QPaintEvent *event)
     painter.drawImage(rect,image,rect);
 }
 
+bool DisplayArea::pixelSet(int x, int y)
+{
+    if(x>image.width()||y>image.height()) return false;
+    return qAlpha(image.pixel(x,y))==255;
+}
+
 void DisplayArea::setPixel(int x, int y, unsigned int col)
 {
     if(x>=image.width()||y>=image.height()) resizeImage(&image,QSize(qMax(x+255,image.width()),qMax(y+255,image.height())));
@@ -55,7 +61,8 @@ void DisplayArea::updateColorMap(float oldMin, float oldMax, float newMin, float
         QRgb currentColor=imagePixels[i];
         if(qAlpha(currentColor)==0) continue;
         unsigned long oldIndex=findPaletteIndex(currentColor,palettePixels,size);
-        QRgb newColor=palettePixels[remap(oldIndex,oldMin,oldMax,newMin,newMax)];
+        unsigned long newIndex=remap(oldIndex,oldMin,oldMax,newMin,newMax);
+        QRgb newColor=palettePixels[newIndex];
         imagePixels[i]=newColor;
     }
 }

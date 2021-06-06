@@ -58,18 +58,14 @@ void InputParser::process()
             decimal=false;
         break;
         case '\n':
-            index=0;
             minFreq=qMin(minFreq,currentLine.minFreq);
             maxFreq=qMax(maxFreq,currentLine.maxFreq);
 
             sendPixel();
 
-            if(currentLine.maxFreq<=lastMaxFreq){
-                currentY++;
-                currentX=0;
-            }
             lastMaxFreq=currentLine.maxFreq;
 
+            index=0;
             nbOfLinesParsed++;
             currentLine=line();
             decimal=false;
@@ -159,7 +155,12 @@ void InputParser::sendPixel()
     QRgb color;
     double normCol=(currentPowerValue-minPow)/(maxPow-minPow);
     QRgb* palettePixels=(QRgb*)palette.bits();
-    color=palettePixels[qRound(palette.sizeInBytes()/sizeof(QRgb)*normCol)];
+    unsigned long paletteIndex=qRound(palette.sizeInBytes()/sizeof(QRgb)*normCol);
+    color=palettePixels[paletteIndex];
+
+    currentX=(currentLine.minFreq-minFreq)/currentLine.freqStep+(index-5);
+
+    if(display->pixelSet(currentX,currentY)) currentY++;
 
     display->setPixel(currentX,currentY,color);
     currentX++;

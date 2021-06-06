@@ -11,6 +11,7 @@ public:
     void setPixel(int x,int y,unsigned int col);
     bool saveImage(const QString &fileName, const char *fileFormat);
     void updateColorMap(float oldMin,float oldMax,float newMin,float newMax,QImage palette);
+    bool pixelSet(int x,int y);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
