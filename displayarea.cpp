@@ -46,17 +46,27 @@ bool DisplayArea::saveImage(const QString &fileName, const char *fileFormat)
     return image.save(fileName, fileFormat);
 }
 
-void DisplayArea::updateColorMap(float oldMin, float oldMax, float newMin, float newMax)
+void DisplayArea::updateColorMap(float oldMin, float oldMax, float newMin, float newMax,QImage palette)
 {
     QRgb* imagePixels=(QRgb*)image.bits();
+    QRgb* palettePixels=(QRgb*)palette.bits();
+    unsigned long size=palette.sizeInBytes()/sizeof(QRgb);
     for(unsigned long long i=0;i<image.sizeInBytes()/sizeof(QRgb);i++){
         QRgb currentColor=imagePixels[i];
-        QRgb newColor=qRgba(remap(qRed(currentColor),oldMin,oldMax,newMin,newMax),remap(qGreen(currentColor),oldMin,oldMax,newMin,newMax),remap(qBlue(currentColor),oldMin,oldMax,newMin,newMax),qAlpha(currentColor));
+        if(qAlpha(currentColor)==0) continue;
+        unsigned long oldIndex=findPaletteIndex(currentColor,palettePixels,size);
+        QRgb newColor=palettePixels[remap(oldIndex,oldMin,oldMax,newMin,newMax)];
         imagePixels[i]=newColor;
     }
 }
 
-char DisplayArea::remap(char c, float omin, float omax, float nmin, float nmax)
+unsigned long DisplayArea::findPaletteIndex(QRgb col, QRgb* palette,unsigned long size)
+{
+    for(unsigned long i=0;i<size;i++) if(col==palette[i]) return i;
+    return 0;
+}
+
+unsigned long DisplayArea::remap(unsigned long c, float omin, float omax, float nmin, float nmax)
 {
     float nVal=(255*(omin-nmin)+c*(omax-omin))/(nmax-nmin);
     return qRound(nVal);

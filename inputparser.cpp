@@ -17,9 +17,18 @@ InputParser::InputParser(FILE* input,DisplayArea* display)
     timer->start(0);*/
 }
 
-void InputParser::sendParameters(unsigned long ignoreFirstNLines)
+void InputParser::sendParameters(unsigned long ignoreFirstNLines,QString palettePath)
 {
     this->ignoreFirstNLines=ignoreFirstNLines;
+    if(palettePath!=NULL){
+        usePalette=true;
+        palette=QImage(palettePath);
+    }
+    else{
+        palette=QImage(255,1,QImage::Format_ARGB32);
+        QRgb* palettePixels=(QRgb*)palette.bits();
+        for(unsigned int i=0;i<palette.sizeInBytes()/sizeof(QRgb);i++) palettePixels[i]=qRgb(i,i,i);
+    }
 }
 
 void InputParser::process()
@@ -141,14 +150,18 @@ void InputParser::sendPixel()
         float newMin=qMin(currentPowerValue,minPow);
         float newMax=qMax(currentPowerValue,maxPow);
 
-        display->updateColorMap(minPow,maxPow,newMin,newMax);
+        display->updateColorMap(minPow,maxPow,newMin,newMax,palette);
 
         minPow=newMin;
         maxPow=newMax;
     }
 
-    int col=qRound((currentPowerValue-minPow)*255/(maxPow-minPow));
-    display->setPixel(currentX,currentY,qRgba(col,col,col,255));
+    QRgb color;
+    double normCol=(currentPowerValue-minPow)/(maxPow-minPow);
+    QRgb* palettePixels=(QRgb*)palette.bits();
+    color=palettePixels[qRound(palette.sizeInBytes()/sizeof(QRgb)*normCol)];
+
+    display->setPixel(currentX,currentY,color);
     currentX++;
     currentPowerValue=0;
     decimalIndex=1;

@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QRandomGenerator>
 #include <QDateTime>
+#include <QImage>
 
 class DisplayArea;
 
@@ -24,7 +25,7 @@ class InputParser : public QObject
 public:
     InputParser(FILE* input,DisplayArea* display);
 
-    void sendParameters(unsigned long ignoreFirstNLines);
+    void sendParameters(unsigned long ignoreFirstNLines,QString palettePath);
 
 private:
     unsigned long minFreq=-1;
@@ -39,6 +40,9 @@ private:
 
     unsigned long nbOfLinesParsed=0;
     unsigned long ignoreFirstNLines=0;
+
+    bool usePalette=false;
+    QImage palette;
 
     line currentLine;
 

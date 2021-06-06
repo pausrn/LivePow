@@ -41,9 +41,16 @@ void MainWindow::sendArgs(QCommandLineParser *argsParser)
 
     parser=new InputParser(input,displayArea);
 
+    unsigned long nbOfLinesToSkip=0;
     if(argsParser->isSet("s")){
-        parser->sendParameters(argsParser->value("s").toLong());
+        nbOfLinesToSkip=argsParser->value("s").toLong();
     }
+
+    QString palettePath=NULL;
+    if(argsParser->isSet("p")){
+        palettePath=argsParser->value("p");
+    }
+    parser->sendParameters(nbOfLinesToSkip,palettePath);
 
     QThread* workerThread=new QThread();
 

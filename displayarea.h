@@ -10,7 +10,7 @@ public:
     DisplayArea(QWidget *parent = nullptr);
     void setPixel(int x,int y,unsigned int col);
     bool saveImage(const QString &fileName, const char *fileFormat);
-    void updateColorMap(float oldMin,float oldMax,float newMin,float newMax);
+    void updateColorMap(float oldMin,float oldMax,float newMin,float newMax,QImage palette);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -18,7 +18,8 @@ protected:
 private:
     void resizeImage(QImage *image, const QSize &newSize);
 
-    char remap(char val,float omin,float omax,float nmin,float nmax);
+    unsigned long remap(unsigned long val,float omin,float omax,float nmin,float nmax);
+    unsigned long findPaletteIndex(QRgb col,QRgb* palette,unsigned long size);
 
     QImage image;
 
