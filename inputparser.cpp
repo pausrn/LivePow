@@ -58,6 +58,9 @@ void InputParser::process()
         case '.':
             decimal=true;
         break;
+        case '-':
+            sign=-1;
+        break;
         default:
             switch(index){
                 case 0:
@@ -134,7 +137,7 @@ void InputParser::sendPixel()
         maxPow=newMax;
     }
 
-    int col=qRound(currentPowerValue-minPow)*255/(maxPow-minPow);
+    int col=qRound(currentPowerValue-minPow*255/(maxPow-minPow));
     display->setPixel(currentX,currentY,qRgba(col,col,col,255));
     currentX++;
     currentPowerValue=0;

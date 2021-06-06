@@ -16,7 +16,28 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setCentralWidget(displayArea);
 
+    createActions();
+    createMenus();
+
+    setWindowTitle(tr("LivePow"));
+}
+
+MainWindow::~MainWindow()
+{
+}
+
+void MainWindow::sendArgs(QCommandLineParser *argsParser)
+{
+    const QStringList posArgs = argsParser->positionalArguments();
+
     FILE* input=stdin;
+
+    if(posArgs.length()==1){
+        QFile file(posArgs.at(0));
+        QFileInfo fileInfo(file);
+        input=fopen(fileInfo.absoluteFilePath().toLatin1(),"r");
+    }
+    else if(posArgs.length()>1) fprintf(stderr,"too much positionnal args, using stdin");
 
     parser=new InputParser(input,displayArea);
 
@@ -26,15 +47,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(workerThread, &QThread::started, parser, &InputParser::process);
     connect(workerThread, &QThread::finished, workerThread, &QThread::deleteLater);
     workerThread->start();
-
-    createActions();
-    createMenus();
-
-    setWindowTitle(tr("LivePow"));
-}
-
-MainWindow::~MainWindow()
-{
 }
 
 void MainWindow::save(){

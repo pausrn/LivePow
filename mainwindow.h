@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QCommandLineParser>
 
 class DisplayArea;
 class InputParser;
@@ -14,7 +15,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    static void tick();
+    void sendArgs(QCommandLineParser* argsParser);
 
     InputParser *parser;
 
