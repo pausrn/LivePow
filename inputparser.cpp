@@ -47,6 +47,12 @@ void InputParser::process()
             switch(index){
                 case 1:
                     computeEpochDate();
+                    if(nbOfLinesParsed==ignoreFirstNLines){
+                        startDate=currentLine.parsedDate;
+                        endDate=currentLine.parsedDate;
+                    }
+                    startDate=qMin(currentLine.parsedDate,startDate);
+                    endDate=qMax(currentLine.parsedDate,endDate);
                 break;
                 case 3:
                     if(currentLine.maxFreq==maxFreq) currentY++;
@@ -56,6 +62,7 @@ void InputParser::process()
                 break;
                 case 4:
                     if(decimal) currentLine.freqStep++;
+                    freqStep=currentLine.freqStep;
                 break;
                 default:
                     if(index>5){
@@ -69,6 +76,8 @@ void InputParser::process()
         case '\n':
             sendPixel();
 
+            display->updateScale(minFreq,maxFreq,freqStep,10,&startDate,&endDate);
+
             lastMaxFreq=currentLine.maxFreq;
 
             index=0;
@@ -81,6 +90,14 @@ void InputParser::process()
         break;
         case '-':
             sign=-1;
+            switch(index){
+                case 0:
+                    addToString(c,&currentLine.firstDate);
+                break;
+                case 1:
+                    addToString(c,&currentLine.secondDate);
+                break;
+            }
         break;
         default:
             switch(index){
@@ -106,7 +123,6 @@ void InputParser::process()
         break;
     }
     }
-    //printf("%c aaa");
 }
 
 void InputParser::addToString(char c, QString* str)

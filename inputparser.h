@@ -30,6 +30,9 @@ public:
 private:
     unsigned long minFreq=-1;
     unsigned long maxFreq=0;
+    unsigned long freqStep=0;
+    QDateTime startDate;
+    QDateTime endDate;
 
     float minPow=__FLT_MAX__;
     float maxPow=-__FLT_MAX__;
