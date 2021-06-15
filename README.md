@@ -17,3 +17,12 @@ make -j4
 
 ### Example reading from scan.csv using the palette from palette.png while skipping the first 22 lines
 `./LivePow -p palette.png -s 22 scan.csv`
+
+### Palette
+Palette are simple images files, pixels are read from left to right and top to bottom and mapped from the lower value to the higher value  
+The default palette is grayscale  
+Example palette :  
+![Example palette](palette.png)
+
+### Example output : FM band scan
+![Example output](out_fm_band.png)
