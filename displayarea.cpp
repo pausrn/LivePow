@@ -37,6 +37,8 @@ void DisplayArea::resizeImage(QImage *image, const QSize &newSize)
 {
     if(image->size()==newSize) return;
 
+    resize(newSize);
+
     QImage newImage(newSize,QImage::Format_ARGB32);
     newImage.fill(qRgba(255,255,255,0));
     QPainter painter(&newImage);

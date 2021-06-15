@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QCommandLineParser>
+#include <QScrollArea>
 
 class DisplayArea;
 class InputParser;
@@ -20,6 +21,7 @@ public:
     InputParser *parser;
 
 private:
+    QScrollArea *scrollArea;
     DisplayArea *displayArea;
     void createActions();
     void createMenus();

@@ -10,16 +10,22 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QMenuBar>
+#include <QGuiApplication>
+#include <QScreen>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),displayArea(new DisplayArea(this))
 {
-    setCentralWidget(displayArea);
+    displayArea->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    scrollArea = new QScrollArea();
+    scrollArea->setWidget(displayArea);
+    setCentralWidget(scrollArea);
 
     createActions();
     createMenus();
 
     setWindowTitle(tr("LivePow"));
+    resize(QGuiApplication::primaryScreen()->availableSize() * 3 / 5);
 }
 
 MainWindow::~MainWindow()
